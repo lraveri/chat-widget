@@ -1,7 +1,7 @@
 import './chat.css';
 
 (function() {
-    let threadId = null; // Variabile per memorizzare il threadId
+    let threadId = null;
 
     function loadCSS(href) {
         const link = document.createElement('link');
@@ -10,6 +10,8 @@ import './chat.css';
         document.head.appendChild(link);
     }
 
+    loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+    loadCSS('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
     loadCSS('styles.css');
 
     function initializeChat(baseURL, baseColor, logoURL, module, assistantId) {
@@ -18,23 +20,30 @@ import './chat.css';
         const chatButton = document.createElement('div');
         chatButton.id = 'chat-button';
         chatButton.style.backgroundColor = baseColor;
-        chatButton.innerHTML = `<img src="${logoURL}" alt="Chat Logo" />`;
+        chatButton.innerHTML = `<i class="fas fa-comment"></i>`;
         document.body.appendChild(chatButton);
 
         const chatWindow = document.createElement('div');
         chatWindow.id = 'chat-window';
-        chatWindow.style.display = 'none';
+        chatWindow.style.visibility = 'hidden'; // Imposta visibility hidden
         chatWindow.innerHTML = `
-            <div id="chat-header">Chat</div>
+            <div id="chat-header">Chat <span id="chat-close">&times;</span></div>
             <div id="chat-body"></div>
-            <input id="chat-input" type="text" placeholder="Type a message..." />
-            <button id="chat-send">Send</button>
+            <div id="chat-input-container">
+                <input id="chat-input" type="text" placeholder="Type a message..." />
+                <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
         `;
         document.body.appendChild(chatWindow);
 
+        const chatClose = chatWindow.querySelector('#chat-close');
+        chatClose.addEventListener('click', function() {
+            chatWindow.style.visibility = 'hidden'; // Usa visibility hidden
+        });
+
         chatButton.addEventListener('click', function() {
             console.log('Chat button clicked');
-            chatWindow.style.display = chatWindow.style.display === 'none' ? 'block' : 'none';
+            chatWindow.style.visibility = chatWindow.style.visibility === 'hidden' ? 'visible' : 'hidden'; // Alterna visibility
         });
 
         function sendMessage(message) {
@@ -42,6 +51,8 @@ import './chat.css';
                 console.error('Thread ID is not set.');
                 return;
             }
+
+            displayMessage('...', 'assistant'); // Mostra i puntini di attesa
 
             console.log('Sending message:', message);
             const xhr = new XMLHttpRequest();
@@ -52,6 +63,8 @@ import './chat.css';
                     console.log('POST response received:', xhr.status, xhr.responseText);
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
+                        const chatBody = document.getElementById('chat-body');
+                        chatBody.removeChild(chatBody.lastChild); // Rimuove i puntini di attesa
                         displayMessage(response.responseMessage, 'assistant');
                     }
                 }
