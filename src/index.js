@@ -13,7 +13,7 @@ import './chat.css';
     loadCSS('styles.css');
 
     function initializeChat(baseURL, baseColor, logoURL, module, assistantId) {
-        console.log('Initializing chat with baseURL:', baseURL, 'baseColor:', baseColor, 'logoURL:', logoURL, 'additionalParams:', additionalParams);
+        console.log('Initializing chat with baseURL:', baseURL, 'baseColor:', baseColor, 'logoURL:', logoURL, 'module:', module, 'assistantId:', assistantId);
 
         const chatButton = document.createElement('div');
         chatButton.id = 'chat-button';
