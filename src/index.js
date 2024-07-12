@@ -12,7 +12,7 @@ import './chat.css';
 
     loadCSS('styles.css');
 
-    function initializeChat(baseURL, baseColor, logoURL, additionalParams) {
+    function initializeChat(baseURL, baseColor, logoURL, module, assistantId) {
         console.log('Initializing chat with baseURL:', baseURL, 'baseColor:', baseColor, 'logoURL:', logoURL, 'additionalParams:', additionalParams);
 
         const chatButton = document.createElement('div');
@@ -45,18 +45,18 @@ import './chat.css';
 
             console.log('Sending message:', message);
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', `${baseURL}/api/v1/luca/asst_EFVdiDtbWpyLjQRwvaTyvk7G/chat`, true);
+            xhr.open('POST', `${baseURL}/api/v1/${module}/chat`, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     console.log('POST response received:', xhr.status, xhr.responseText);
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
-                        displayMessage(response.response, 'assistant');
+                        displayMessage(response.responseMessage, 'assistant');
                     }
                 }
             };
-            xhr.send(JSON.stringify({ threadId: threadId, message: message, ...additionalParams }));
+            xhr.send(JSON.stringify({ threadId: threadId, message: message, assistantId: assistantId }));
         }
 
         function displayMessage(message, sender) {
@@ -83,7 +83,7 @@ import './chat.css';
             }
         });
 
-        console.log('Sending initial GET request to', `${baseURL}/api/v1/luca/start`);
+        console.log('Sending initial GET request to', `${baseURL}/api/v1/${module}/start`);
         const xhr = new XMLHttpRequest();
         xhr.open('GET', `${baseURL}/api/v1/luca/start`, true);
         xhr.onreadystatechange = function() {
@@ -91,7 +91,7 @@ import './chat.css';
                 console.log('GET response received:', xhr.status, xhr.responseText);
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
-                    threadId = response.thread_id; // Memorizza il threadId
+                    threadId = response.threadId; // Memorizza il threadId
                     console.log('Received threadId:', threadId);
                     displayMessage('Chat started. How can I help you?', 'assistant');
                 }
