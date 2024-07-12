@@ -14,8 +14,8 @@ import './chat.css';
     loadCSS('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
     loadCSS('styles.css');
 
-    function initializeChat(baseURL, baseColor, logoURL, module, assistantId) {
-        console.log('Initializing chat with baseURL:', baseURL, 'baseColor:', baseColor, 'logoURL:', logoURL, 'module:', module, 'assistantId:', assistantId);
+    function initializeChat(baseURL, baseColor, logoURL, module, assistantId, initialMessage) {
+        console.log('Initializing chat with baseURL:', baseURL, 'baseColor:', baseColor, 'logoURL:', logoURL, 'module:', module, 'assistantId:', assistantId, 'initialMessage:', initialMessage);
 
         const chatButton = document.createElement('div');
         chatButton.id = 'chat-button';
@@ -25,7 +25,7 @@ import './chat.css';
 
         const chatWindow = document.createElement('div');
         chatWindow.id = 'chat-window';
-        chatWindow.style.visibility = 'hidden'; // Imposta visibility hidden
+        chatWindow.style.visibility = 'hidden';
         chatWindow.innerHTML = `
             <div id="chat-header">Chat <span id="chat-close">&times;</span></div>
             <div id="chat-body"></div>
@@ -38,7 +38,7 @@ import './chat.css';
 
         const chatClose = chatWindow.querySelector('#chat-close');
         chatClose.addEventListener('click', function() {
-            chatWindow.style.visibility = 'hidden'; // Usa visibility hidden
+            chatWindow.style.visibility = 'hidden';
         });
 
         chatButton.addEventListener('click', function() {
@@ -52,7 +52,7 @@ import './chat.css';
                 return;
             }
 
-            displayMessage('...', 'assistant'); // Mostra i puntini di attesa
+            displayMessage('...', 'assistant');
 
             console.log('Sending message:', message);
             const xhr = new XMLHttpRequest();
@@ -64,7 +64,7 @@ import './chat.css';
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
                         const chatBody = document.getElementById('chat-body');
-                        chatBody.removeChild(chatBody.lastChild); // Rimuove i puntini di attesa
+                        chatBody.removeChild(chatBody.lastChild);
                         displayMessage(response.responseMessage, 'assistant');
                     }
                 }
@@ -98,19 +98,19 @@ import './chat.css';
 
         console.log('Sending initial GET request to', `${baseURL}/api/v1/${module}/start`);
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `${baseURL}/api/v1/luca/start`, true);
+        xhr.open('POST', `${baseURL}/api/v1/luca/start`, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 console.log('GET response received:', xhr.status, xhr.responseText);
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
-                    threadId = response.threadId; // Memorizza il threadId
+                    threadId = response.threadId;
                     console.log('Received threadId:', threadId);
-                    displayMessage('Chat started. How can I help you?', 'assistant');
+                    displayMessage(initialMessage, 'assistant');
                 }
             }
         };
-        xhr.send();
+        xhr.send(JSON.stringify({ initialMessage: initialMessage }));
     }
 
     window.initializeChat = initializeChat;
