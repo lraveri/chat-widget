@@ -12,8 +12,6 @@ import './chat.css';
 
     loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
     loadCSS('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-    //loadCSS('styles.css');
-    loadCSS('https://cdn.jsdelivr.net/gh/lraveri/chat-widget@main/dist/styles.css');
 
     function initializeChat(baseURL, baseColor, logoURL, module, assistantId, initialMessage) {
         console.log('Initializing chat with baseURL:', baseURL, 'baseColor:', baseColor, 'logoURL:', logoURL, 'module:', module, 'assistantId:', assistantId, 'initialMessage:', initialMessage);
