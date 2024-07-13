@@ -27,7 +27,7 @@ import './chat.css';
         chatWindow.id = 'chat-window';
         chatWindow.style.visibility = 'hidden';
         chatWindow.innerHTML = `
-            <div id="chat-header">Chat <span id="chat-close">&times;</span></div>
+            <div id="chat-header"> <span id="chat-close">&times;</span></div>
             <div id="chat-body"></div>
             <div id="chat-input-container">
                 <input id="chat-input" type="text" placeholder="Type a message..." />
@@ -35,6 +35,8 @@ import './chat.css';
             </div>
         `;
         document.body.appendChild(chatWindow);
+
+        document.getElementById('chat-header').style.backgroundColor = baseColor;
 
         const chatClose = chatWindow.querySelector('#chat-close');
         chatClose.addEventListener('click', function() {
@@ -90,6 +92,8 @@ import './chat.css';
             }
         });
 
+        document.getElementById('chat-send').style.backgroundColor = baseColor;
+
         document.getElementById('chat-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('chat-send').click();
@@ -106,7 +110,9 @@ import './chat.css';
                     const response = JSON.parse(xhr.responseText);
                     threadId = response.threadId;
                     console.log('Received threadId:', threadId);
-                    displayMessage(initialMessage, 'assistant');
+                    if(initialMessage !== '') {
+                        displayMessage(initialMessage, 'assistant');
+                    }
                 }
             }
         };

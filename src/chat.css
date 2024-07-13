@@ -38,7 +38,6 @@ body {
 }
 
 #chat-header {
-    background-color: #3498db;
     color: #fff;
     padding: 10px;
     text-align: center;
@@ -48,6 +47,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+#chat-header::before {
+    content: '';
+    flex-grow: 1;
 }
 
 #chat-close {
@@ -81,7 +85,6 @@ body {
 }
 
 #chat-send {
-    background-color: #3498db;
     color: #fff;
     border: none;
     padding: 5px;
@@ -99,7 +102,6 @@ body {
     height: 20px;
 }
 
-/* Stile dei messaggi dell'assistente */
 .assistant {
     align-self: flex-start;
     background-color: #f1f0f0;
@@ -110,11 +112,10 @@ body {
     max-width: 80%;
 }
 
-/* Stile dei messaggi dell'utente */
 .user {
     align-self: flex-end;
-    background-color: #3498db;
-    color: #fff;
+    background-color: #f1f0f0;
+    color: #000;
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
